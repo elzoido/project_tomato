@@ -1,0 +1,8 @@
+// Wifi config
+const char* ssid = "**********";
+const char* password = "**********";
+
+// Has to be at least 4 not to interfere with light level reading, which takes 3 seconds
+const int poll_seconds = 30;
+// If we read less than this value, we let the water flow
+const int moisture_threshold = 500;
