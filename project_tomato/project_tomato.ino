@@ -29,10 +29,7 @@ bool checked_light = 1;
 
 ESP8266WebServer server(80);
 
-const int led = 13;
-
 void getAllData() {
-  digitalWrite(led, 1);
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
   JsonArray& moisture = root.createNestedArray("moisture");
@@ -50,11 +47,9 @@ void getAllData() {
   String json_string;
   root.printTo(json_string);
   server.send(200, "application/json", json_string);
-  digitalWrite(led, 0);
 }
 
 void getAllMoisture() {
-  digitalWrite(led, 1);
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
   JsonArray& moisture = root.createNestedArray("moisture");
@@ -64,11 +59,9 @@ void getAllMoisture() {
   String json_string;
   root.printTo(json_string);
   server.send(200, "application/json", json_string);
-  digitalWrite(led, 0);
 }
 
 void getAllTemperature() {
-  digitalWrite(led, 1);
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
   JsonArray& temp = root.createNestedArray("temperature");
@@ -78,11 +71,9 @@ void getAllTemperature() {
   String json_string;
   root.printTo(json_string);
   server.send(200, "application/json", json_string);
-  digitalWrite(led, 0);
 }
 
 void getAllLight() {
-  digitalWrite(led, 1);
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
   JsonArray& light = root.createNestedArray("light");
@@ -92,12 +83,10 @@ void getAllLight() {
   String json_string;
   root.printTo(json_string);
   server.send(200, "application/json", json_string);
-  digitalWrite(led, 0);
 }
 
 
 void handleRoot() {
-  digitalWrite(led, 1);
   server.send(200, "text/html",
   "<html>"
     "<head>"
@@ -113,11 +102,9 @@ void handleRoot() {
       "</ul>"
     "</body>"
   "</html>");
-  digitalWrite(led, 0);
 }
 
 void handleNotFound(){
-  digitalWrite(led, 1);
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server.uri();
@@ -130,13 +117,9 @@ void handleNotFound(){
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
   server.send(404, "text/plain", message);
-  digitalWrite(led, 0);
 }
 
 void setup() {
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
-
   pinMode(water_pin, OUTPUT);
   digitalWrite(water_pin, 0);
 
