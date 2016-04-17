@@ -31,13 +31,35 @@ ESP8266WebServer server(80);
 
 const int led = 13;
 
+void getAllData() {
+  digitalWrite(led, 1);
+  StaticJsonBuffer<200> jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+  JsonArray& moisture = root.createNestedArray("moisture");
+  for (int i = 0; i < cnt_sensor; i++) {
+    moisture.add(last_moisture[i]);
+  }
+  JsonArray& temp = root.createNestedArray("temperature");
+  for (int i = 0; i < cnt_sensor; i++) {
+    temp.add((float)last_temp[i] / (float)10, 2);
+  }
+  JsonArray& light = root.createNestedArray("light");
+  for (int i = 0; i < cnt_sensor; i++) {
+    light.add(last_light[i]);
+  }
+  String json_string;
+  root.printTo(json_string);
+  server.send(200, "application/json", json_string);
+  digitalWrite(led, 0);
+}
+
 void getAllMoisture() {
   digitalWrite(led, 1);
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  JsonArray& data = root.createNestedArray("data");
+  JsonArray& moisture = root.createNestedArray("moisture");
   for (int i = 0; i < cnt_sensor; i++) {
-    data.add(last_moisture[i]);
+    moisture.add(last_moisture[i]);
   }
   String json_string;
   root.printTo(json_string);
@@ -49,9 +71,9 @@ void getAllTemperature() {
   digitalWrite(led, 1);
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  JsonArray& data = root.createNestedArray("data");
+  JsonArray& temp = root.createNestedArray("temperature");
   for (int i = 0; i < cnt_sensor; i++) {
-    data.add((float)last_temp[i] / (float)10, 2);
+    temp.add((float)last_temp[i] / (float)10, 2);
   }
   String json_string;
   root.printTo(json_string);
@@ -63,9 +85,9 @@ void getAllLight() {
   digitalWrite(led, 1);
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  JsonArray& data = root.createNestedArray("data");
+  JsonArray& light = root.createNestedArray("light");
   for (int i = 0; i < cnt_sensor; i++) {
-    data.add(last_light[i]);
+    light.add(last_light[i]);
   }
   String json_string;
   root.printTo(json_string);
@@ -84,6 +106,7 @@ void handleRoot() {
     "<body>"
       "<p>JSON-API</p>"
       "<ul>"
+        "<li><a href='/getAllData'>Alle Daten abfragen</a></li>"
         "<li><a href='/getAllMoisture'>Alle Feuchtigkeitssensoren abfragen</a></li>"
         "<li><a href='/getAllTemperature'>Alle Temperatursensoren abfragen</a></li>"
         "<li><a href='/getAllLight'>Alle Lichtsensoren abfragen</a></li>"
@@ -135,6 +158,7 @@ void setup() {
 
   server.on("/", handleRoot);
 
+  server.on("/getAllData", getAllData);
   server.on("/getAllMoisture", getAllMoisture);
   server.on("/getAllTemperature", getAllTemperature);
   server.on("/getAllLight", getAllLight);
