@@ -149,8 +149,8 @@ void setup() {
   server.onNotFound(handleNotFound);
 
   // Set sensor adresses and initialize
-  sensor[0].changeAddress(0x20);
-  sensor[1].changeAddress(0x21);
+  sensor[0].changeSensor(0x20);
+  sensor[1].changeSensor(0x21);
 
   /*
   sensor1.begin(); // reset sensor
