@@ -1,0 +1,4 @@
+Blue: GND
+Red: VCC
+Green: SDA
+Yellow: SCL
