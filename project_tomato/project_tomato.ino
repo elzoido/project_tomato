@@ -301,13 +301,15 @@ void loop() {
     feed_temp.send(sum_temp / (cnt_sensor * 10.0));
 
     // Start polling light sensors
-    if (SERIALOUT)
-      Serial.println("Start polling light sensors and wait for 3 seconds");
+    if (checked_light) {
+      if (SERIALOUT)
+        Serial.println("Start polling light sensors and wait for 3 seconds");
 
-    for (int i = 0; i < cnt_sensor; i++)
-      sensor[i].startMeasureLight();
+      for (int i = 0; i < cnt_sensor; i++)
+        sensor[i].startMeasureLight();
 
-    checked_light = 0;
+      checked_light = 0;
+    }
     last_poll = now;
   }
 
